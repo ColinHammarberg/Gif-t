@@ -105,7 +105,7 @@ function createDraftWithGif(gifUrl: string, sourceUrl: string, exampleEmail: str
 
 function insertGifIntoCurrentEmail(gifUrl: string, sourceUrl: string, exampleEmail: string) {
   // Get the current item (email) the user is working on
-  const item = Office.context.mailbox.item as Office.MessageCompose;
+  // const item = Office.context.mailbox.item as Office.MessageCompose;
 
   // Construct the HTML content to insert
   const verifiedWatermarkUrl = "https://gift-general-resources.s3.eu-north-1.amazonaws.com/verified_by_gift_2.png";
@@ -129,10 +129,9 @@ function insertGifIntoCurrentEmail(gifUrl: string, sourceUrl: string, exampleEma
   `;
 
   // Insert the GIF HTML into the body of the email
-  item.body.setSelectedDataAsync(gifHtml, { coercionType: Office.CoercionType.Html }, (result) => {
-    if (result.status === Office.AsyncResultStatus.Failed) {
-      console.error("Error inserting GIF: " + result.error.message);
-    }
+  Office.context.mailbox.displayNewMessageForm({
+    htmlBody: gifHtml,
+    // Add other properties like subject, to recipients, cc recipients, etc., as needed
   });
 }
 
