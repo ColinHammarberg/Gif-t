@@ -1,0 +1,30 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Outlook Desktop (Chrome)",
+      "type": "chrome",
+      "request": "attach",
+      "port": 9222, // Ensure Chrome is running with remote debugging on this port
+      "timeout": 600000,
+      "webRoot": "${workspaceRoot}",
+      "url": "https://localhost:3000/taskpane.html?_host_Info=Outlook$Win32$16.01$en-US$$$$0",
+      "preLaunchTask": "Debug: Outlook Desktop", // Ensure this task is defined in tasks.json
+      "postDebugTask": "Stop Debug" // Ensure this task is defined in tasks.json
+    },
+    {
+      "name": "Outlook Desktop (Edge Legacy)",
+      "type": "chrome",
+      "request": "attach",
+      "url": "https://localhost:3000/taskpane.html?_host_Info=Outlook$Win32$16.01$en-US$$$$0",
+      "port": 9222,
+      "timeout": 600000,
+      "webRoot": "${workspaceRoot}",
+      "preLaunchTask": "Debug: Outlook Desktop",
+      "postDebugTask": "Stop Debug"
+    },
+  ]
+}
