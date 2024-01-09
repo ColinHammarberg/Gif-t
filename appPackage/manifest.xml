@@ -8,7 +8,7 @@
   <ProviderName>Contoso</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
   <DisplayName DefaultValue="Gif-t" />
-  <Description DefaultValue="A template to get started."/>
+  <Description DefaultValue="Gif-t is a way to quickly create a compressed and shareable gif from any public, online web page, presentation or video. With that, you can share an engaging preview of your page or content and drive clicks like never before."/>
   <IconUrl DefaultValue="https://localhost:3000/assets/gif-t-logo.png" />
   <HighResolutionIconUrl DefaultValue="https://localhost:3000/assets/gif-t-logo.png" />
   <SupportUrl DefaultValue="https://www.contoso.com/support" />
