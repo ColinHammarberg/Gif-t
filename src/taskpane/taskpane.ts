@@ -5,19 +5,25 @@ import axios from "axios";
 Office.onReady((info) => {
   if (info.host === Office.HostType.Outlook) {
     document.getElementById("app-body").style.display = "flex";
-    document.getElementById("loginButton").addEventListener("click", login);
+    document.getElementById("loginForm").addEventListener("submit", login);
     document.getElementById("searchInput").addEventListener("keypress", function (event) {
       if (event.key === "Enter") {
         searchGifs();
       }
     });
-    autoLoginUser();
+    setTimeout(() => {
+      autoLoginUser();
+    }, 3000);
   }
 });
 
 let allGifs = [];
+let isManualLoginInProgress = false;
 
 async function autoLoginUser() {
+  if (isManualLoginInProgress) {
+    return;
+  }
   const userEmail = Office.context.mailbox.userProfile.emailAddress;
   console.log("userEmail", userEmail);
 
@@ -38,12 +44,46 @@ async function autoLoginUser() {
         }
       });
     } else {
-      console.log("User login failed or user does not exist");
-      document.getElementById("login-form").style.display = "flex";
+      displayManualLoginForm();
     }
   } catch (error) {
     console.error("Error during auto-login:", error);
+    displayManualLoginForm();
   }
+}
+
+function displayManualLoginForm() {
+  document.getElementById("manual-login-form").style.display = "block";
+}
+
+export async function login(event) {
+  event.preventDefault();
+  isManualLoginInProgress = true;
+  const email = (document.getElementById("email") as HTMLInputElement).value;
+  const password = (document.getElementById("password") as HTMLInputElement).value;
+
+  try {
+    const response = await axios.post(`https://gift-server-eu-1.azurewebsites.net/signin`, {
+      email,
+      password,
+    });
+    console.log("Sign in successful:", response.data);
+
+    Office.context.roamingSettings.set("accessToken", response.data.access_token);
+    console.log("response.data.accessToken", response.data.access_token);
+    console.log("response.data.accessToken", Office.context.roamingSettings.get("accessToken"));
+    Office.context.roamingSettings.saveAsync(function (asyncResult) {
+      if (asyncResult.status === Office.AsyncResultStatus.Failed) {
+        console.error("Error saving settings: " + asyncResult.error.message);
+      } else {
+        document.getElementById("manual-login-form").style.display = "none";
+        fetchAndDisplayUserGifs();
+      }
+    });
+  } catch (error) {
+    console.error("Error signing in:", error);
+  }
+  isManualLoginInProgress = false;
 }
 
 export async function fetchAndDisplayUserGifs() {
@@ -52,7 +92,6 @@ export async function fetchAndDisplayUserGifs() {
     console.error("Access token is not available");
     return;
   }
-
   try {
     const loadingSpinner = document.getElementById("loading-spinner");
     if (loadingSpinner) loadingSpinner.style.display = "flex";
@@ -60,6 +99,7 @@ export async function fetchAndDisplayUserGifs() {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
     if (loadingSpinner) loadingSpinner.style.display = "none";
+    document.getElementById("search-form").style.display = "flex";
     const gifs = response.data.data; // Adjust based on actual response structure
     allGifs = gifs || [];
     console.log("response", response);
@@ -75,64 +115,55 @@ function searchGifs() {
   displayGifs(filteredGifs);
 }
 
-function createDraftWithGif(gifUrl: string, sourceUrl: string, exampleEmail: string) {
-  const verifiedWatermarkUrl = "https://gift-general-resources.s3.eu-north-1.amazonaws.com/verified_by_gift_2.png";
-  const formattedExampleEmail = exampleEmail.replace(/\n\n/g, "<br><br>") || "";
+function insertGifIntoCurrentEmail(gifUrl, sourceUrl, exampleEmail) {
+  Office.context.mailbox.item.body.getAsync(
+    "html",
+    { asyncContext: "This is passed to the callback" },
+    function callback(result) {
+      // Check for success
+      if (result.status === Office.AsyncResultStatus.Succeeded) {
+        // The existing body content
+        const existingBody = result.value;
+        const verifiedWatermarkUrl = "https://gift-general-resources.s3.eu-north-1.amazonaws.com/verified_by_gift_2.png";
+        const formattedExampleEmail = exampleEmail.replace(/\n\n/g, "<br><br>") || "";
 
-  const htmlBody = `
-    ${formattedExampleEmail}
-    <table style="width: 200px; margin-bottom: 20px;">
-      <tr>
-        <td style="border:none;">
-          <a href="${sourceUrl}" target="_blank">
-            <img src="${gifUrl}" alt="GIF" style="width: 100%; height: auto;"/>
-          </a>
-        </td>
-      </tr>
-      <tr>
-        <td style="border:none;">
-          <img src="${verifiedWatermarkUrl}" alt="Verified" style="width: 100%; height: auto;"/>
-        </td>
-      </tr>
-    </table>
-  `;
+        // Construct the HTML content to insert
+        const gifHtml = `
+          ${formattedExampleEmail}
+          <table style="width: 200px; margin-bottom: 20px;">
+            <tr>
+              <td style="border:none;">
+                <a href="${sourceUrl}" target="_blank">
+                  <img src="${gifUrl}" alt="GIF" style="width: 100%; height: auto;"/>
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td style="border:none;">
+                <img src="${verifiedWatermarkUrl}" alt="Verified" style="width: 100%; height: auto;"/>
+              </td>
+            </tr>
+          </table>
+        `;
 
-  Office.context.mailbox.displayNewMessageForm({
-    htmlBody: htmlBody,
-    // Add other properties like subject, to recipients, cc recipients, etc., as needed
-  });
-}
-
-function insertGifIntoCurrentEmail(gifUrl: string, sourceUrl: string, exampleEmail: string) {
-  // Get the current item (email) the user is working on
-  // const item = Office.context.mailbox.item as Office.MessageCompose;
-
-  // Construct the HTML content to insert
-  const verifiedWatermarkUrl = "https://gift-general-resources.s3.eu-north-1.amazonaws.com/verified_by_gift_2.png";
-  const formattedExampleEmail = exampleEmail.replace(/\n\n/g, "<br><br>") || "";
-  const gifHtml = `
-    ${formattedExampleEmail}
-    <table style="width: 200px; margin-bottom: 20px;">
-      <tr>
-        <td style="border:none;">
-          <a href="${sourceUrl}" target="_blank">
-            <img src="${gifUrl}" alt="GIF" style="width: 100%; height: auto;"/>
-          </a>
-        </td>
-      </tr>
-      <tr>
-        <td style="border:none;">
-          <img src="${verifiedWatermarkUrl}" alt="Verified" style="width: 100%; height: auto;"/>
-        </td>
-      </tr>
-    </table>
-  `;
-
-  // Insert the GIF HTML into the body of the email
-  Office.context.mailbox.displayNewMessageForm({
-    htmlBody: gifHtml,
-    // Add other properties like subject, to recipients, cc recipients, etc., as needed
-  });
+        // Combine with existing body and update the email body
+        const updatedBody = existingBody + gifHtml;
+        Office.context.mailbox.item.body.setAsync(
+          updatedBody,
+          { coercionType: Office.CoercionType.Html, asyncContext: "This is passed to the callback" },
+          function callback(result) {
+            if (result.status === Office.AsyncResultStatus.Succeeded) {
+              console.log("GIF inserted successfully!");
+            } else {
+              console.error("Failed to insert GIF:", result.error);
+            }
+          }
+        );
+      } else {
+        console.error("Failed to get email body:", result.error);
+      }
+    }
+  );
 }
 
 function displayGifs(gifs) {
@@ -145,7 +176,7 @@ function displayGifs(gifs) {
   container.innerHTML = "";
 
   gifs?.forEach((gif) => {
-    const gifContainer = document.createElement("div"); // Container for each GIF and its name
+    const gifContainer = document.createElement("div");
     const img = document.createElement("img");
     const name = document.createElement("span");
     gifContainer.style.height = "150px";
@@ -173,6 +204,7 @@ function displayGifs(gifs) {
     container.appendChild(gifContainer);
   });
 }
+
 export async function run() {
   try {
     const item = Office.context.mailbox.item;
@@ -189,35 +221,3 @@ export async function run() {
 function getUserEmail(): string {
   return Office.context.mailbox.userProfile.emailAddress;
 }
-
-export async function login() {
-  const email = (document.getElementById("email") as HTMLInputElement).value;
-  const password = (document.getElementById("password") as HTMLInputElement).value;
-
-  try {
-    const response = await axios.post(`https://gift-server-eu-1.azurewebsites.net/signin`, {
-      email,
-      password,
-    });
-    console.log("Sign in successful:", response.data);
-
-    // Store the access token
-    Office.context.roamingSettings.set("accessToken", response.data.access_token);
-    console.log("response.data.accessToken", response.data.access_token);
-    console.log("response.data.accessToken", Office.context.roamingSettings.get("accessToken"));
-    Office.context.roamingSettings.saveAsync(function (asyncResult) {
-      if (asyncResult.status === Office.AsyncResultStatus.Failed) {
-        console.error("Error saving settings: " + asyncResult.error.message);
-      } else {
-        fetchAndDisplayUserGifs();
-        console.log("Settings saved");
-      }
-    });
-    // Handle successful sign-in
-  } catch (error) {
-    console.error("Error signing in:", error);
-    // Handle errors
-  }
-}
-
-// Additional functions for your add-in as needed
