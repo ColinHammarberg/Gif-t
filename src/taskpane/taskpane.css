@@ -106,11 +106,24 @@
   border: 2px solid #f4149b;
 }
 
-#manualLoginButton {
+.empty-gifs {
+  flex-direction: column;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+.empty-gifs-text {
+  font-family: "Staatliches";
+  font-size: 15px;
+  color: #fff;
+}
+
+button {
   background-color: #f4149b;
   border-radius: 25px;
   border: 2px solid #000;
-  font-family: "Staatliches";
+  font-family: "Staatliches" !important;
   cursor: pointer;
   color: #fff;
   width: 100px;

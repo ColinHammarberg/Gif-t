@@ -11,6 +11,9 @@ Office.onReady((info) => {
         searchGifs();
       }
     });
+    document.getElementById("createGifsButton").addEventListener("click", function() {
+      window.open("https://giveagif-t.com", "_blank");
+    });
     setTimeout(() => {
       autoLoginUser();
     }, 3000);
@@ -100,7 +103,7 @@ export async function fetchAndDisplayUserGifs() {
     });
     if (loadingSpinner) loadingSpinner.style.display = "none";
     document.getElementById("search-form").style.display = "flex";
-    const gifs = response.data.data; // Adjust based on actual response structure
+    const gifs = response.data.data;
     allGifs = gifs || [];
     console.log("response", response);
     displayGifs(allGifs);
@@ -175,34 +178,39 @@ function displayGifs(gifs) {
 
   container.innerHTML = "";
 
-  gifs?.forEach((gif) => {
-    const gifContainer = document.createElement("div");
-    const img = document.createElement("img");
-    const name = document.createElement("span");
-    gifContainer.style.height = "150px";
-    gifContainer.style.overflow = "hidden";
-    img.src = gif.url;
-    img.alt = "User GIF";
-    img.style.width = "120px";
-    img.style.height = "120px";
-    img.style.cursor = "pointer";
-    name.style.width = "120px";
-    name.style.overflow = "hidden";
-    name.style.color = "#fff";
-    name.style.fontFamily = "Staatliches";
-    img.addEventListener("click", () =>
-      insertGifIntoCurrentEmail(gif.url, gif.source || "https://gif-t.io", gif.example_email || "")
-    );
+  if (gifs.length === 0) {
+    document.getElementById("no-gifs").style.display = "flex";
+    document.getElementById("search-form").style.display = "none";
+  } else {
+      gifs.forEach((gif) => {
+      const gifContainer = document.createElement("div");
+      const img = document.createElement("img");
+      const name = document.createElement("span");
+      gifContainer.style.height = "150px";
+      gifContainer.style.overflow = "hidden";
+      img.src = gif.url;
+      img.alt = "User GIF";
+      img.style.width = "120px";
+      img.style.height = "120px";
+      img.style.cursor = "pointer";
+      name.style.width = "120px";
+      name.style.overflow = "hidden";
+      name.style.color = "#fff";
+      name.style.fontFamily = "Staatliches";
+      img.addEventListener("click", () =>
+        insertGifIntoCurrentEmail(gif.url, gif.source || "https://gif-t.io", gif.example_email || "")
+      );
 
-    name.textContent = gif.name;
-    name.style.display = "block";
-    name.style.textAlign = "center";
+      name.textContent = gif.name;
+      name.style.display = "block";
+      name.style.textAlign = "center";
 
-    gifContainer.appendChild(img);
-    gifContainer.appendChild(name);
+      gifContainer.appendChild(img);
+      gifContainer.appendChild(name);
 
-    container.appendChild(gifContainer);
-  });
+      container.appendChild(gifContainer);
+    });
+  }
 }
 
 export async function run() {
