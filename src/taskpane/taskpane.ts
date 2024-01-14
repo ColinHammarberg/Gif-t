@@ -12,7 +12,7 @@ Office.onReady((info) => {
       }
     });
     document.getElementById("createGifsButton").addEventListener("click", function () {
-      window.open("https://giveagif-t.com", "_blank");
+      window.open("https://giveagif-t.com/gif-library", "_blank");
     });
     setTimeout(() => {
       autoLoginUser();
@@ -189,12 +189,11 @@ function displayGifs(gifs) {
       const gifContainer = document.createElement("div");
       const img = document.createElement("img");
       const name = document.createElement("span");
-      gifContainer.style.height = "150px";
       gifContainer.style.overflow = "hidden";
       img.src = gif.url;
       img.alt = "User GIF";
-      img.style.width = "120px";
-      img.style.height = "120px";
+      img.style.width = "130px";
+      img.style.height = "130px";
       img.style.cursor = "pointer";
       name.style.width = "120px";
       name.style.overflow = "hidden";
