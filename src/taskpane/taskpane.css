@@ -106,6 +106,15 @@
   border: 2px solid #f4149b;
 }
 
+#error {
+  font-family: "Staatliches";
+  color: #fe6b01;
+  font-size: 12px;
+  width: 100%;
+  justify-content: center;
+  margin-top: 20px;
+}
+
 .empty-gifs {
   flex-direction: column;
   width: 100%;

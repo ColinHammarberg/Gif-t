@@ -11,7 +11,7 @@ Office.onReady((info) => {
         searchGifs();
       }
     });
-    document.getElementById("createGifsButton").addEventListener("click", function() {
+    document.getElementById("createGifsButton").addEventListener("click", function () {
       window.open("https://giveagif-t.com", "_blank");
     });
     setTimeout(() => {
@@ -77,14 +77,16 @@ export async function login(event) {
     console.log("response.data.accessToken", Office.context.roamingSettings.get("accessToken"));
     Office.context.roamingSettings.saveAsync(function (asyncResult) {
       if (asyncResult.status === Office.AsyncResultStatus.Failed) {
-        console.error("Error saving settings: " + asyncResult.error.message);
+        console.error("Error signing in:" + asyncResult.error.message);
       } else {
         document.getElementById("manual-login-form").style.display = "none";
+        document.getElementById("error").style.display = "none";
         fetchAndDisplayUserGifs();
       }
     });
   } catch (error) {
     console.error("Error signing in:", error);
+    document.getElementById("error").style.display = "flex";
   }
   isManualLoginInProgress = false;
 }
@@ -127,7 +129,8 @@ function insertGifIntoCurrentEmail(gifUrl, sourceUrl, exampleEmail) {
       if (result.status === Office.AsyncResultStatus.Succeeded) {
         // The existing body content
         const existingBody = result.value;
-        const verifiedWatermarkUrl = "https://gift-general-resources.s3.eu-north-1.amazonaws.com/verified_by_gift_2.png";
+        const verifiedWatermarkUrl =
+          "https://gift-general-resources.s3.eu-north-1.amazonaws.com/verified_by_gift_2.png";
         const formattedExampleEmail = exampleEmail.replace(/\n\n/g, "<br><br>") || "";
 
         // Construct the HTML content to insert
@@ -182,7 +185,7 @@ function displayGifs(gifs) {
     document.getElementById("no-gifs").style.display = "flex";
     document.getElementById("search-form").style.display = "none";
   } else {
-      gifs.forEach((gif) => {
+    gifs.forEach((gif) => {
       const gifContainer = document.createElement("div");
       const img = document.createElement("img");
       const name = document.createElement("span");
