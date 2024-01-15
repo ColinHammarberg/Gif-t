@@ -26,9 +26,10 @@ jobs:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_GENTLE_SMOKE_0D09BD810 }}
           repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for Github integrations (i.e. PR comments)
           action: "upload"
+          app_build_command: "npm run build"
           app_location: "/"
           api_location: ""
-          output_location: "/"
+          output_location: "dist"
          
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
