@@ -14,7 +14,8 @@
   <HighResolutionIconUrl DefaultValue="https://gentle-smoke-0d09bd810.4.azurestaticapps.net/assets/gif-t-logo.png" />
   <SupportUrl DefaultValue="https://gif-t.io/rights-privacy-1" />
   <AppDomains>
-    <AppDomain>gif-t.io</AppDomain>
+    <AppDomain>https://gift-server-eu-1.azurewebsites.net/</AppDomain>
+    <AppDomain>https://gif-t.io/</AppDomain>
   </AppDomains>
   <Hosts>
     <Host Name="Mailbox"/>
