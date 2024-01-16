@@ -18,7 +18,7 @@ module.exports = async (env, options) => {
     devtool: "source-map",
     entry: {
       polyfill: ["core-js/stable", "regenerator-runtime/runtime"],
-      taskpane: ["./src/taskpane/taskpane.js", "./src/taskpane/index.html"],
+      taskpane: ["./src/taskpane/taskpane.ts", "./src/taskpane/index.html"],
       commands: "./src/commands/commands.ts",
     },
     output: {
