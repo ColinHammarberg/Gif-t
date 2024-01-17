@@ -21,6 +21,22 @@ Office.onReady((info) => {
   }
 });
 
+Office.initialize = function (reason) {
+  document.getElementById("app-body").style.display = "flex";
+    document.getElementById("loginForm").addEventListener("submit", login);
+    document.getElementById("searchInput").addEventListener("keypress", function (event) {
+      if (event.key === "Enter") {
+        searchGifs();
+      }
+    });
+    document.getElementById("createGifsButton").addEventListener("click", function () {
+      window.open("https://giveagif-t.com/gif-library", "_blank");
+    });
+    setTimeout(() => {
+      autoLoginUser();
+    }, 3000);
+};
+
 let allGifs = [];
 let isManualLoginInProgress = false;
 
