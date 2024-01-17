@@ -22,6 +22,7 @@ Office.onReady((info) => {
 });
 
 Office.initialize = function (reason) {
+  console.log("Office is initialized. Reason:", reason);
   document.getElementById("app-body").style.display = "flex";
     document.getElementById("loginForm").addEventListener("submit", login);
     document.getElementById("searchInput").addEventListener("keypress", function (event) {
