@@ -3,6 +3,7 @@
 import axios from "axios";
 
 Office.onReady((info) => {
+  console.log('info.host', info.host);
   if (info.host === Office.HostType.Outlook) {
     document.getElementById("app-body").style.display = "flex";
     document.getElementById("loginForm").addEventListener("submit", login);
