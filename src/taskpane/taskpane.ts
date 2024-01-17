@@ -4,21 +4,6 @@ import axios from "axios";
 
 Office.onReady((info) => {
   console.log('info.host', info.host);
-  if (info.host === Office.HostType.Outlook) {
-    document.getElementById("app-body").style.display = "flex";
-    document.getElementById("loginForm").addEventListener("submit", login);
-    document.getElementById("searchInput").addEventListener("keypress", function (event) {
-      if (event.key === "Enter") {
-        searchGifs();
-      }
-    });
-    document.getElementById("createGifsButton").addEventListener("click", function () {
-      window.open("https://giveagif-t.com/gif-library", "_blank");
-    });
-    // setTimeout(() => {
-    //   autoLoginUser();
-    // }, 3000);
-  }
 });
 
 let allGifs = [];
