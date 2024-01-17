@@ -62,8 +62,8 @@ function displayManualLoginForm() {
 export async function login(event) {
   event.preventDefault();
   isManualLoginInProgress = true;
-  const email = (document.getElementById("email") as HTMLInputElement).value;
-  const password = (document.getElementById("password") as HTMLInputElement).value;
+  const email = (document.getElementById("emailManual") as HTMLInputElement).value;
+  const password = (document.getElementById("passwordManual") as HTMLInputElement).value;
 
   try {
     const response = await axios.post(`https://gift-server-eu-1.azurewebsites.net/signin`, {
