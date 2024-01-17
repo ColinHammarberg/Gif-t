@@ -15,63 +15,46 @@ Office.onReady((info) => {
     document.getElementById("createGifsButton").addEventListener("click", function () {
       window.open("https://giveagif-t.com/gif-library", "_blank");
     });
-    setTimeout(() => {
-      autoLoginUser();
-    }, 3000);
+    // setTimeout(() => {
+    //   autoLoginUser();
+    // }, 3000);
   }
 });
-
-Office.initialize = function (reason) {
-  console.log("Office is initialized. Reason:", reason);
-  document.getElementById("app-body").style.display = "flex";
-    document.getElementById("loginForm").addEventListener("submit", login);
-    document.getElementById("searchInput").addEventListener("keypress", function (event) {
-      if (event.key === "Enter") {
-        searchGifs();
-      }
-    });
-    document.getElementById("createGifsButton").addEventListener("click", function () {
-      window.open("https://giveagif-t.com/gif-library", "_blank");
-    });
-    setTimeout(() => {
-      autoLoginUser();
-    }, 3000);
-};
 
 let allGifs = [];
 let isManualLoginInProgress = false;
 
-async function autoLoginUser() {
-  if (isManualLoginInProgress) {
-    return;
-  }
-  const userEmail = Office.context.mailbox.userProfile.emailAddress;
-  console.log("userEmail", userEmail);
+// async function autoLoginUser() {
+//   if (isManualLoginInProgress) {
+//     return;
+//   }
+//   const userEmail = Office.context.mailbox.userProfile.emailAddress;
+//   console.log("userEmail", userEmail);
 
-  try {
-    const response = await axios.post("https://gift-server-eu-1.azurewebsites.net/login_with_email", {
-      email: userEmail,
-    });
+//   try {
+//     const response = await axios.post("https://gift-server-eu-1.azurewebsites.net/login_with_email", {
+//       email: userEmail,
+//     });
 
-    const result = response.data;
-    if (result.status === "Login successful") {
-      const accessToken = result.access_token;
-      Office.context.roamingSettings.set("accessToken", accessToken);
-      Office.context.roamingSettings.saveAsync((asyncResult) => {
-        if (asyncResult.status === Office.AsyncResultStatus.Failed) {
-          console.error("Error saving access token:", asyncResult.error.message);
-        } else {
-          fetchAndDisplayUserGifs();
-        }
-      });
-    } else {
-      displayManualLoginForm();
-    }
-  } catch (error) {
-    console.error("Error during auto-login:", error);
-    displayManualLoginForm();
-  }
-}
+//     const result = response.data;
+//     if (result.status === "Login successful") {
+//       const accessToken = result.access_token;
+//       Office.context.roamingSettings.set("accessToken", accessToken);
+//       Office.context.roamingSettings.saveAsync((asyncResult) => {
+//         if (asyncResult.status === Office.AsyncResultStatus.Failed) {
+//           console.error("Error saving access token:", asyncResult.error.message);
+//         } else {
+//           fetchAndDisplayUserGifs();
+//         }
+//       });
+//     } else {
+//       displayManualLoginForm();
+//     }
+//   } catch (error) {
+//     console.error("Error during auto-login:", error);
+//     displayManualLoginForm();
+//   }
+// }
 
 function displayManualLoginForm() {
   document.getElementById("manual-login-form").style.display = "block";
