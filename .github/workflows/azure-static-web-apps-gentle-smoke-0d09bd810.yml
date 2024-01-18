@@ -30,6 +30,8 @@ jobs:
           app_location: "/"
           api_location: ""
           output_location: "/dist"
+          name: Rename taskpane.html to index.html
+          run: mv dist/taskpane.html dist/index.html
          
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
