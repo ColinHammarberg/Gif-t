@@ -1,0 +1,66 @@
+<!-- Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT License. -->
+<!-- This file shows how to design a first-run page that provides a welcome screen to the user about the features of the add-in. -->
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Contoso Task Pane Add-in</title>
+
+    <!-- Office JavaScript API -->
+    <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+
+    <!-- For more information on Fluent UI, visit https://developer.microsoft.com/fluentui#/. -->
+    <link
+      rel="stylesheet"
+      href="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-core/11.0.0/css/fabric.min.css"
+    />
+
+    <!-- Template styles -->
+    <link href="taskpane.css" rel="stylesheet" type="text/css" />
+  </head>
+
+  <body class="ms-font-m ms-welcome ms-Fabric">
+    <header class="ms-welcome__header ms-bgColor-neutralLighter">
+      <img
+        width="90"
+        height="90"
+        src="https://gentle-smoke-0d09bd810.4.azurestaticapps.net/assets/gif-t-logo.png"
+        class="logo"
+        alt="Contoso"
+        title="Contoso"
+      />
+    </header>
+    <div id="search-form" style="display: none">
+      <input type="text" id="searchInput" placeholder="Search GIFs" />
+    </div>
+    <div id="manual-login-form" style="display: none">
+      <form id="loginForm">
+        <div>
+          <input type="email" id="email" name="email" placeholder="Enter your email" required />
+        </div>
+        <div>
+          <input type="password" id="password" name="password" placeholder="Enter your password" required />
+        </div>
+        <button type="submit" id="manualLoginButton">Login</button>
+      </form>
+    </div>
+    <main id="app-body" class="ms-welcome__main">
+      <!-- Login Form -->
+      <div id="login-form" style="display: none">
+        <input type="email" id="email" placeholder="Email" />
+        <input type="password" id="password" placeholder="Password" />
+        <button id="loginButton">Sign In</button>
+      </div>
+      <div
+        id="loading-spinner"
+        style="display: none; align-items: center; width: 100%; height: 100%; justify-content: center"
+      >
+        <img src="https://gentle-smoke-0d09bd810.4.azurestaticapps.net/assets/loading-gif.png" class="loading-img" alt="Loading..." />
+      </div>
+      <div id="gifs-container" class="gif-container"></div>
+    </main>
+  </body>
+</html>

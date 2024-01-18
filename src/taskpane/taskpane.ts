@@ -3,43 +3,54 @@
 import axios from "axios";
 
 Office.onReady((info) => {
-  console.log('info.host', info.host);
+  if (info.host === Office.HostType.Outlook) {
+    document.getElementById("app-body").style.display = "flex";
+    document.getElementById("loginForm").addEventListener("submit", login);
+    document.getElementById("searchInput").addEventListener("keypress", function (event) {
+      if (event.key === "Enter") {
+        searchGifs();
+      }
+    });
+    setTimeout(() => {
+      autoLoginUser();
+    }, 3000);
+  }
 });
 
 let allGifs = [];
 let isManualLoginInProgress = false;
 
-// async function autoLoginUser() {
-//   if (isManualLoginInProgress) {
-//     return;
-//   }
-//   const userEmail = Office.context.mailbox.userProfile.emailAddress;
-//   console.log("userEmail", userEmail);
+async function autoLoginUser() {
+  if (isManualLoginInProgress) {
+    return;
+  }
+  const userEmail = Office.context.mailbox.userProfile.emailAddress;
+  console.log("userEmail", userEmail);
 
-//   try {
-//     const response = await axios.post("https://gift-server-eu-1.azurewebsites.net/login_with_email", {
-//       email: userEmail,
-//     });
+  try {
+    const response = await axios.post("https://gift-server-eu-1.azurewebsites.net/login_with_email", {
+      email: userEmail,
+    });
 
-//     const result = response.data;
-//     if (result.status === "Login successful") {
-//       const accessToken = result.access_token;
-//       Office.context.roamingSettings.set("accessToken", accessToken);
-//       Office.context.roamingSettings.saveAsync((asyncResult) => {
-//         if (asyncResult.status === Office.AsyncResultStatus.Failed) {
-//           console.error("Error saving access token:", asyncResult.error.message);
-//         } else {
-//           fetchAndDisplayUserGifs();
-//         }
-//       });
-//     } else {
-//       displayManualLoginForm();
-//     }
-//   } catch (error) {
-//     console.error("Error during auto-login:", error);
-//     displayManualLoginForm();
-//   }
-// }
+    const result = response.data;
+    if (result.status === "Login successful") {
+      const accessToken = result.access_token;
+      Office.context.roamingSettings.set("accessToken", accessToken);
+      Office.context.roamingSettings.saveAsync((asyncResult) => {
+        if (asyncResult.status === Office.AsyncResultStatus.Failed) {
+          console.error("Error saving access token:", asyncResult.error.message);
+        } else {
+          fetchAndDisplayUserGifs();
+        }
+      });
+    } else {
+      displayManualLoginForm();
+    }
+  } catch (error) {
+    console.error("Error during auto-login:", error);
+    displayManualLoginForm();
+  }
+}
 
 function displayManualLoginForm() {
   document.getElementById("manual-login-form").style.display = "block";
@@ -48,8 +59,8 @@ function displayManualLoginForm() {
 export async function login(event) {
   event.preventDefault();
   isManualLoginInProgress = true;
-  const email = (document.getElementById("emailManual") as HTMLInputElement).value;
-  const password = (document.getElementById("passwordManual") as HTMLInputElement).value;
+  const email = (document.getElementById("email") as HTMLInputElement).value;
+  const password = (document.getElementById("password") as HTMLInputElement).value;
 
   try {
     const response = await axios.post(`https://gift-server-eu-1.azurewebsites.net/signin`, {
@@ -63,16 +74,14 @@ export async function login(event) {
     console.log("response.data.accessToken", Office.context.roamingSettings.get("accessToken"));
     Office.context.roamingSettings.saveAsync(function (asyncResult) {
       if (asyncResult.status === Office.AsyncResultStatus.Failed) {
-        console.error("Error signing in:" + asyncResult.error.message);
+        console.error("Error saving settings: " + asyncResult.error.message);
       } else {
         document.getElementById("manual-login-form").style.display = "none";
-        document.getElementById("error").style.display = "none";
         fetchAndDisplayUserGifs();
       }
     });
   } catch (error) {
     console.error("Error signing in:", error);
-    document.getElementById("error").style.display = "flex";
   }
   isManualLoginInProgress = false;
 }
@@ -91,7 +100,7 @@ export async function fetchAndDisplayUserGifs() {
     });
     if (loadingSpinner) loadingSpinner.style.display = "none";
     document.getElementById("search-form").style.display = "flex";
-    const gifs = response.data.data;
+    const gifs = response.data.data; // Adjust based on actual response structure
     allGifs = gifs || [];
     console.log("response", response);
     displayGifs(allGifs);
@@ -115,8 +124,7 @@ function insertGifIntoCurrentEmail(gifUrl, sourceUrl, exampleEmail) {
       if (result.status === Office.AsyncResultStatus.Succeeded) {
         // The existing body content
         const existingBody = result.value;
-        const verifiedWatermarkUrl =
-          "https://gift-general-resources.s3.eu-north-1.amazonaws.com/verified_by_gift_2.png";
+        const verifiedWatermarkUrl = "https://gift-general-resources.s3.eu-north-1.amazonaws.com/verified_by_gift_2.png";
         const formattedExampleEmail = exampleEmail.replace(/\n\n/g, "<br><br>") || "";
 
         // Construct the HTML content to insert
@@ -167,38 +175,34 @@ function displayGifs(gifs) {
 
   container.innerHTML = "";
 
-  if (gifs.length === 0) {
-    document.getElementById("no-gifs").style.display = "flex";
-    document.getElementById("search-form").style.display = "none";
-  } else {
-    gifs.forEach((gif) => {
-      const gifContainer = document.createElement("div");
-      const img = document.createElement("img");
-      const name = document.createElement("span");
-      gifContainer.style.overflow = "hidden";
-      img.src = gif.url;
-      img.alt = "User GIF";
-      img.style.width = "130px";
-      img.style.height = "130px";
-      img.style.cursor = "pointer";
-      name.style.width = "120px";
-      name.style.overflow = "hidden";
-      name.style.color = "#fff";
-      name.style.fontFamily = "Staatliches";
-      img.addEventListener("click", () =>
-        insertGifIntoCurrentEmail(gif.url, gif.source || "https://gif-t.io", gif.example_email || "")
-      );
+  gifs?.forEach((gif) => {
+    const gifContainer = document.createElement("div");
+    const img = document.createElement("img");
+    const name = document.createElement("span");
+    gifContainer.style.height = "150px";
+    gifContainer.style.overflow = "hidden";
+    img.src = gif.url;
+    img.alt = "User GIF";
+    img.style.width = "120px";
+    img.style.height = "120px";
+    img.style.cursor = "pointer";
+    name.style.width = "120px";
+    name.style.overflow = "hidden";
+    name.style.color = "#fff";
+    name.style.fontFamily = "Staatliches";
+    img.addEventListener("click", () =>
+      insertGifIntoCurrentEmail(gif.url, gif.source || "https://gif-t.io", gif.example_email || "")
+    );
 
-      name.textContent = gif.name;
-      name.style.display = "block";
-      name.style.textAlign = "center";
+    name.textContent = gif.name;
+    name.style.display = "block";
+    name.style.textAlign = "center";
 
-      gifContainer.appendChild(img);
-      gifContainer.appendChild(name);
+    gifContainer.appendChild(img);
+    gifContainer.appendChild(name);
 
-      container.appendChild(gifContainer);
-    });
-  }
+    container.appendChild(gifContainer);
+  });
 }
 
 export async function run() {

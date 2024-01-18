@@ -11,7 +11,7 @@
       "port": 9222, // Ensure Chrome is running with remote debugging on this port
       "timeout": 600000,
       "webRoot": "${workspaceRoot}",
-      "url": "https://localhost:3000/index.html?_host_Info=Outlook$Win32$16.01$en-US$$$$0",
+      "url": "https://gentle-smoke-0d09bd810.4.azurestaticapps.net/taskpane.html?_host_Info=Outlook$Win32$16.01$en-US$$$$0",
       "preLaunchTask": "Debug: Outlook Desktop", // Ensure this task is defined in tasks.json
       "postDebugTask": "Stop Debug" // Ensure this task is defined in tasks.json
     },
@@ -19,7 +19,7 @@
       "name": "Outlook Desktop (Edge Legacy)",
       "type": "chrome",
       "request": "attach",
-      "url": "https://localhost:3000/index.html?_host_Info=Outlook$Win32$16.01$en-US$$$$0",
+      "url": "https://gentle-smoke-0d09bd810.4.azurestaticapps.net/taskpane.html?_host_Info=Outlook$Win32$16.01$en-US$$$$0",
       "port": 9222,
       "timeout": 600000,
       "webRoot": "${workspaceRoot}",
