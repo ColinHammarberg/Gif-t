@@ -35,7 +35,7 @@ provision:
   - uses: azureStorage/enableStaticWebsite
     with:
       storageResourceId: ${{ADDIN_AZURE_STORAGE_RESOURCE_ID}}
-      indexPage: taskpane.html
+      indexPage: index.html
       errorPage: error.html
 
 # Triggered when 'teamsfx deploy' is executed

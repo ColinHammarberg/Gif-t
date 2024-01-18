@@ -36,13 +36,13 @@
     <div id="search-form" style="display: none">
       <input type="text" id="searchInput" placeholder="Search GIFs" />
     </div>
-    <div id="manual-login-form">
+    <div id="manual-login-form" style="display: none">
       <form id="loginForm">
         <div>
-          <input type="email" id="emailManual" name="email" placeholder="Enter your email" required />
+          <input type="email" id="email" name="email" placeholder="Enter your email" required />
         </div>
         <div>
-          <input type="password" id="passwordManual" name="password" placeholder="Enter your password" required />
+          <input type="password" id="password" name="password" placeholder="Enter your password" required />
         </div>
         <button type="submit" id="manualLoginButton">Login</button>
       </form>
@@ -50,11 +50,10 @@
     <main id="app-body" class="ms-welcome__main">
       <!-- Login Form -->
       <div id="login-form" style="display: none">
-        <input type="email" id="emailAuto" placeholder="Email" />
-        <input type="password" id="passwordAuto" placeholder="Password" />
+        <input type="email" id="email" placeholder="Email" />
+        <input type="password" id="password" placeholder="Password" />
         <button id="loginButton">Sign In</button>
       </div>
-      <div id="error" style="display: none;">There was an error with signing you in.</div>
       <div
         id="loading-spinner"
         style="display: none; align-items: center; width: 100%; height: 100%; justify-content: center"
@@ -62,10 +61,6 @@
         <img src="https://gentle-smoke-0d09bd810.4.azurestaticapps.net/assets/loading-gif.png" class="loading-img" alt="Loading..." />
       </div>
       <div id="gifs-container" class="gif-container"></div>
-      <div id="no-gifs" class="empty-gifs" style="display: none;">
-        <p class="empty-gifs-text">No GIFs created yet.</p>
-        <button id="createGifsButton" class="create-btn" >Create Gifs</button>
-      </div>
     </main>
   </body>
 </html>

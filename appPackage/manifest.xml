@@ -27,13 +27,13 @@
   <FormSettings>
     <Form xsi:type="ItemRead">
       <DesktopSettings>
-        <SourceLocation DefaultValue="https://gentle-smoke-0d09bd810.4.azurestaticapps.net/taskpane.html"/>
+        <SourceLocation DefaultValue="https://gentle-smoke-0d09bd810.4.azurestaticapps.net/index.html"/>
         <RequestedHeight>250</RequestedHeight>
       </DesktopSettings>
     </Form>
     <Form xsi:type="ItemEdit">
       <DesktopSettings>
-        <SourceLocation DefaultValue="https://gentle-smoke-0d09bd810.4.azurestaticapps.net/taskpane.html"/>
+        <SourceLocation DefaultValue="https://gentle-smoke-0d09bd810.4.azurestaticapps.net/index.html"/>
       </DesktopSettings>
     </Form>
   </FormSettings>
@@ -93,7 +93,7 @@
         </bt:Images>
         <bt:Urls>
           <bt:Url id="Commands.Url" DefaultValue="https://gentle-smoke-0d09bd810.4.azurestaticapps.net/commands.html"/>
-          <bt:Url id="Taskpane.Url" DefaultValue="https://gentle-smoke-0d09bd810.4.azurestaticapps.net/taskpane.html"/>
+          <bt:Url id="Taskpane.Url" DefaultValue="https://gentle-smoke-0d09bd810.4.azurestaticapps.net/index.html"/>
           <bt:Url id="WebViewRuntime.Url" DefaultValue="https://gentle-smoke-0d09bd810.4.azurestaticapps.net/commands.html" />
           <bt:Url id="JSRuntime.Url" DefaultValue="https://gentle-smoke-0d09bd810.4.azurestaticapps.net/commands.js" />
         </bt:Urls>
