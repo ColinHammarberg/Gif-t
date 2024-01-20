@@ -4,7 +4,7 @@ import axios from "axios";
 
 Office.onReady((info) => {
   if (info.host === Office.HostType.Outlook) {
-    document.getElementById("app-body").style.display = "flex";
+    document.getElementById("app-body").style.display = "block";
     document.getElementById("loginForm").addEventListener("submit", login);
     document.getElementById("searchInput").addEventListener("keypress", function (event) {
       if (event.key === "Enter") {
@@ -100,6 +100,7 @@ export async function fetchAndDisplayUserGifs() {
     });
     if (loadingSpinner) loadingSpinner.style.display = "none";
     document.getElementById("search-form").style.display = "flex";
+    document.getElementById("divider").style.display = "flex";
     const gifs = response.data.data; // Adjust based on actual response structure
     allGifs = gifs || [];
     console.log("response", response);
@@ -124,7 +125,8 @@ function insertGifIntoCurrentEmail(gifUrl, sourceUrl, exampleEmail) {
       if (result.status === Office.AsyncResultStatus.Succeeded) {
         // The existing body content
         const existingBody = result.value;
-        const verifiedWatermarkUrl = "https://gift-general-resources.s3.eu-north-1.amazonaws.com/verified_by_gift_2.png";
+        const verifiedWatermarkUrl =
+          "https://gift-general-resources.s3.eu-north-1.amazonaws.com/verified_by_gift_2.png";
         const formattedExampleEmail = exampleEmail.replace(/\n\n/g, "<br><br>") || "";
 
         // Construct the HTML content to insert
@@ -179,15 +181,19 @@ function displayGifs(gifs) {
     const gifContainer = document.createElement("div");
     const img = document.createElement("img");
     const name = document.createElement("span");
-    gifContainer.style.height = "150px";
+    gifContainer.style.height = "140px";
+
     gifContainer.style.overflow = "hidden";
     img.src = gif.url;
     img.alt = "User GIF";
-    img.style.width = "120px";
-    img.style.height = "120px";
+    img.style.width = "100px";
+    img.style.height = "100px";
     img.style.cursor = "pointer";
-    name.style.width = "120px";
+    name.style.width = "80px";
+    name.style.margin = "auto";
+    name.style.whiteSpace = "no-wrap";
     name.style.overflow = "hidden";
+    name.style.fontSize = "12px"
     name.style.color = "#fff";
     name.style.fontFamily = "Staatliches";
     img.addEventListener("click", () =>
