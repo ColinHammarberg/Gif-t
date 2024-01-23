@@ -116,17 +116,15 @@ function searchGifs() {
   displayGifs(filteredGifs);
 }
 
-function insertGifIntoCurrentEmail(gifUrl, sourceUrl, exampleEmail) {
+function insertGifIntoCurrentEmail(sourceUrl, exampleEmail, base64) {
   Office.context.mailbox.item.body.getAsync(
     "html",
     { asyncContext: "This is passed to the callback" },
     function callback(result) {
-      // Check for success
       if (result.status === Office.AsyncResultStatus.Succeeded) {
         // The existing body content
         const existingBody = result.value;
-        const verifiedWatermarkUrl =
-          "https://gift-general-resources.s3.eu-north-1.amazonaws.com/verified_by_gift_2.png";
+        const verifiedWatermarkUrl = "https://gift-general-resources.s3.eu-north-1.amazonaws.com/verified_by_gift_2.png";
         const formattedExampleEmail = exampleEmail.replace(/\n\n/g, "<br><br>") || "";
 
         // Construct the HTML content to insert
@@ -136,7 +134,7 @@ function insertGifIntoCurrentEmail(gifUrl, sourceUrl, exampleEmail) {
             <tr>
               <td style="border:none;">
                 <a href="${sourceUrl}" target="_blank">
-                  <img src="${gifUrl}" alt="GIF" style="width: 100%; height: auto;"/>
+                  <img src="data:image/gif;base64,${base64}" alt="GIF" style="width: 100%; height: auto;"/>
                 </a>
               </td>
             </tr>
@@ -148,7 +146,6 @@ function insertGifIntoCurrentEmail(gifUrl, sourceUrl, exampleEmail) {
           </table>
         `;
 
-        // Combine with existing body and update the email body
         const updatedBody = existingBody + gifHtml;
         Office.context.mailbox.item.body.setAsync(
           updatedBody,
@@ -197,7 +194,7 @@ function displayGifs(gifs) {
     name.style.color = "#fff";
     name.style.fontFamily = "Staatliches";
     img.addEventListener("click", () =>
-      insertGifIntoCurrentEmail(gif.url, gif.source || "https://gif-t.io", gif.example_email || "")
+      insertGifIntoCurrentEmail(gif.source || "https://gif-t.io", gif.example_email || "", gif.base64 )
     );
 
     name.textContent = gif.name;
