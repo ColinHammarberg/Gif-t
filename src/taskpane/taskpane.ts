@@ -122,25 +122,19 @@ function insertGifIntoCurrentEmail(sourceUrl, exampleEmail, base64) {
     { asyncContext: "This is passed to the callback" },
     function callback(result) {
       if (result.status === Office.AsyncResultStatus.Succeeded) {
-        // The existing body content
         const existingBody = result.value;
-        const verifiedWatermarkUrl = "https://gift-general-resources.s3.eu-north-1.amazonaws.com/verified_by_gift_2.png";
         const formattedExampleEmail = exampleEmail.replace(/\n\n/g, "<br><br>") || "";
 
-        // Construct the HTML content to insert
+        // Add a check if the base64 string is too large. Show dialog in that case.
+
         const gifHtml = `
           ${formattedExampleEmail}
-          <table style="width: 200px; margin-bottom: 20px;">
+          <table style="max-width: 300px;">
             <tr>
               <td style="border:none;">
                 <a href="${sourceUrl}" target="_blank">
                   <img src="data:image/gif;base64,${base64}" alt="GIF" style="width: 100%; height: auto;"/>
                 </a>
-              </td>
-            </tr>
-            <tr>
-              <td style="border:none;">
-                <img src="${verifiedWatermarkUrl}" alt="Verified" style="width: 100%; height: auto;"/>
               </td>
             </tr>
           </table>
@@ -150,7 +144,7 @@ function insertGifIntoCurrentEmail(sourceUrl, exampleEmail, base64) {
         Office.context.mailbox.item.body.setAsync(
           updatedBody,
           { coercionType: Office.CoercionType.Html, asyncContext: "This is passed to the callback" },
-          function callback(result) {
+          function(result) {
             if (result.status === Office.AsyncResultStatus.Succeeded) {
               console.log("GIF inserted successfully!");
             } else {
@@ -164,6 +158,7 @@ function insertGifIntoCurrentEmail(sourceUrl, exampleEmail, base64) {
     }
   );
 }
+
 
 function displayGifs(gifs) {
   const container = document.getElementById("gifs-container");
@@ -190,11 +185,11 @@ function displayGifs(gifs) {
     name.style.margin = "auto";
     name.style.whiteSpace = "no-wrap";
     name.style.overflow = "hidden";
-    name.style.fontSize = "12px"
+    name.style.fontSize = "12px";
     name.style.color = "#fff";
     name.style.fontFamily = "Staatliches";
     img.addEventListener("click", () =>
-      insertGifIntoCurrentEmail(gif.source || "https://gif-t.io", gif.example_email || "", gif.base64 )
+      insertGifIntoCurrentEmail(gif.source || "https://gif-t.io", gif.example_email || "", gif.base64)
     );
 
     name.textContent = gif.name;
