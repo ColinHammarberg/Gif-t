@@ -116,7 +116,7 @@ function searchGifs() {
   displayGifs(filteredGifs);
 }
 
-function insertGifIntoCurrentEmail(sourceUrl, exampleEmail, base64) {
+function insertGifIntoCurrentEmail(sourceUrl, exampleEmail, base64, resourceId) {
   Office.context.mailbox.item.body.getAsync(
     "html",
     { asyncContext: "This is passed to the callback" },
@@ -132,7 +132,7 @@ function insertGifIntoCurrentEmail(sourceUrl, exampleEmail, base64) {
           <table style="max-width: 300px;">
             <tr>
               <td style="border:none;">
-                <a href="${sourceUrl}" target="_blank">
+                <a href="https://giveagif-t.com/validate-gif?gif_id=${resourceId}" target="_blank">
                   <img src="data:image/gif;base64,${base64}" alt="GIF" style="width: 100%; height: auto;"/>
                 </a>
               </td>
@@ -189,7 +189,7 @@ function displayGifs(gifs) {
     name.style.color = "#fff";
     name.style.fontFamily = "Staatliches";
     img.addEventListener("click", () =>
-      insertGifIntoCurrentEmail(gif.source || "https://gif-t.io", gif.example_email || "", gif.base64)
+      insertGifIntoCurrentEmail(gif.source || "https://gif-t.io", gif.example_email || "", gif.base64, gif.resourceId)
     );
 
     name.textContent = gif.name;
