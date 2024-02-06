@@ -116,49 +116,84 @@ function searchGifs() {
   displayGifs(filteredGifs);
 }
 
-function insertGifIntoCurrentEmail(sourceUrl, exampleEmail, base64, resourceId) {
-  Office.context.mailbox.item.body.getAsync(
-    "html",
-    { asyncContext: "This is passed to the callback" },
-    function callback(result) {
-      if (result.status === Office.AsyncResultStatus.Succeeded) {
-        const existingBody = result.value;
-        const formattedExampleEmail = exampleEmail.replace(/\n\n/g, "<br><br>") || "";
-
-        // Add a check if the base64 string is too large. Show dialog in that case.
-
-        const gifHtml = `
-          ${formattedExampleEmail}
-          <table style="max-width: 300px;">
-            <tr>
-              <td style="border:none;">
-                <a href="https://giveagif-t.com/validate-gif?gif_id=${resourceId}" target="_blank">
-                  <img src="data:image/gif;base64,${base64}" alt="GIF" style="width: 100%; height: auto;"/>
-                </a>
-              </td>
-            </tr>
-          </table>
-        `;
-
-        const updatedBody = existingBody + gifHtml;
-        Office.context.mailbox.item.body.setAsync(
-          updatedBody,
-          { coercionType: Office.CoercionType.Html, asyncContext: "This is passed to the callback" },
-          function(result) {
-            if (result.status === Office.AsyncResultStatus.Succeeded) {
-              console.log("GIF inserted successfully!");
-            } else {
-              console.error("Failed to insert GIF:", result.error);
-            }
-          }
-        );
-      } else {
-        console.error("Failed to get email body:", result.error);
-      }
-    }
-  );
+function calculateBase64FileSize(base64String) {
+  // Remove MIME type prefix if present
+  const base64Data = base64String.substring(base64String.indexOf(",") + 1);
+  // Remove all spaces/newlines if any
+  const cleanBase64Data = base64Data.replace(/\s+/g, "");
+  // n is the length of the base64 encoded string
+  const n = cleanBase64Data.length;
+  // y is the padding count indicated by '=' characters at the end of the string
+  let y = 0;
+  if (cleanBase64Data.endsWith("==")) {
+    y = 2;
+  } else if (cleanBase64Data.endsWith("=")) {
+    y = 1;
+  }
+  // Calculate the file size in bytes
+  const fileSizeInBytes = n * (3 / 4) - y;
+  return fileSizeInBytes;
 }
 
+function insertGifIntoCurrentEmail(sourceUrl, exampleEmail, base64, resourceId) {
+  const maxSize = 1091845;
+  const fileSizeInBytes = calculateBase64FileSize(base64);
+  console.log("length", fileSizeInBytes);
+
+  if (base64.length > maxSize) {
+    document.getElementById("custom-modal").style.display = "block";
+    document.getElementById("close-modal").onclick = function () {
+      document.getElementById("custom-modal").style.display = "none";
+    };
+    return;
+  } else {
+    Office.context.mailbox.item.body.getAsync(
+      "html",
+      { asyncContext: "This is passed to the callback" },
+      function callback(result) {
+        if (result.status === Office.AsyncResultStatus.Succeeded) {
+          const existingBody = result.value;
+          const formattedExampleEmail = exampleEmail.replace(/\n\n/g, "<br><br>") || "";
+
+          const gifHtml = `
+            ${formattedExampleEmail}
+            <table style="max-width: 300px;">
+              <tr>
+                <td style="border:none;">
+                  <a href="https://giveagif-t.com/validate-gif?gif_id=${resourceId}" target="_blank">
+                    <img src="data:image/gif;base64,${base64}" alt="GIF" style="width: 100%; height: auto;"/>
+                  </a>
+                </td>
+              </tr>
+            </table>
+          `;
+
+          const updatedBody = existingBody + gifHtml;
+          Office.context.mailbox.item.body.setAsync(
+            updatedBody,
+            { coercionType: Office.CoercionType.Html, asyncContext: "This is passed to the callback" },
+            function (result) {
+              console.log('result', result);
+              if (result.status === Office.AsyncResultStatus.Succeeded) {
+                console.log("GIF inserted successfully!");
+              } else {
+                document.getElementById("custom-modal").style.display = "block";
+                document.getElementById("close-modal").onclick = function () {
+                  document.getElementById("custom-modal").style.display = "none";
+                };
+              }
+            }
+          );
+        } else {
+          document.getElementById("custom-modal").style.display = "block";
+          document.getElementById("close-modal").onclick = function () {
+            document.getElementById("custom-modal").style.display = "none";
+          };
+        }
+      }
+    )
+  }
+}
 
 function displayGifs(gifs) {
   const container = document.getElementById("gifs-container");
