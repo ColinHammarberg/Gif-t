@@ -136,7 +136,7 @@ function calculateBase64FileSize(base64String) {
 }
 
 function insertGifIntoCurrentEmail(sourceUrl, exampleEmail, base64, resourceId) {
-  const maxSize = 1091845;
+  const maxSize = 1250000;
   const fileSizeInBytes = calculateBase64FileSize(base64);
   console.log("length", fileSizeInBytes);
 
@@ -173,7 +173,7 @@ function insertGifIntoCurrentEmail(sourceUrl, exampleEmail, base64, resourceId) 
             updatedBody,
             { coercionType: Office.CoercionType.Html, asyncContext: "This is passed to the callback" },
             function (result) {
-              console.log('result', result);
+              console.log("result", result);
               if (result.status === Office.AsyncResultStatus.Succeeded) {
                 console.log("GIF inserted successfully!");
               } else {
@@ -191,7 +191,7 @@ function insertGifIntoCurrentEmail(sourceUrl, exampleEmail, base64, resourceId) 
           };
         }
       }
-    )
+    );
   }
 }
 
