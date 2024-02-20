@@ -52,6 +52,10 @@
   margin: auto;
 }
 
+.welcome {
+  font-size: 20px;
+}
+
 .ms-welcome__header {
   display: flex;
   flex-direction: column;
@@ -71,6 +75,67 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   margin-top: 10px;
+}
+
+#landing-page {
+  display: flex;
+  margin: auto;
+  font-family: "Staatliches";
+  background-color: #808080;
+  border-radius: 6px;
+  padding: 12px 24px;
+  justify-content: center;
+  gap: 48px;
+  height: 100%;
+  align-items: center;
+  flex-direction: column;
+  color: #fff;
+}
+
+#signoutButton {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  font-size: 10px;
+  width: 50px;
+  height: 20px;
+}
+
+#landing-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  cursor: pointer;
+}
+
+.description {
+  width: 200px;
+  margin: auto;
+  display: flex !important;
+  justify-content: center;
+  color: #fff;
+  font-size: 12px;
+  text-align: center;
+}
+
+#signupButton {
+  background-color: #83cef8 !important;
+  cursor: pointer;
+  width: 150px;
+}
+
+#signinButton {
+  width: 150px;
+}
+
+#oauthLoginButton {
+  font-family: "Staatliches";
+  font-size: 15px;
+  text-align: center;
+  width: 150px;
+  border: 1px solid #fff;
 }
 
 #search-form {

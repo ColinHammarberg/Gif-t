@@ -4,18 +4,43 @@ import axios from "axios";
 
 Office.onReady((info) => {
   if (info.host === Office.HostType.Outlook) {
+    // Ensure DOM content is fully loaded
     document.getElementById("app-body").style.display = "block";
-    document.getElementById("loginForm").addEventListener("submit", login);
-    document.getElementById("searchInput").addEventListener("keypress", function (event) {
+    document.getElementById("loginForm")?.addEventListener("submit", login);
+    document.getElementById("signoutButton")?.addEventListener("click", signoutUser);
+    document.getElementById("signupButton")?.addEventListener("click", signupUser);
+    document.getElementById("signinButton")?.addEventListener("click", autoLoginUser);
+    document.getElementById("searchInput")?.addEventListener("keypress", function (event) {
       if (event.key === "Enter") {
         searchGifs();
       }
     });
-    setTimeout(() => {
-      autoLoginUser();
-    }, 3000);
   }
 });
+
+async function signoutUser() {
+  try {
+    Office.context.roamingSettings.remove("accessToken");
+    Office.context.roamingSettings.saveAsync(function (asyncResult) {
+      if (asyncResult.status === Office.AsyncResultStatus.Succeeded) {
+        document.getElementById("app-body").style.display = "block";
+        document.getElementById("search-form").style.display = "none";
+        document.getElementById("loading-spinner").style.display = "none";
+        document.getElementById("divider").style.display = "none";
+        document.getElementById("gifs-container").style.display = "none";
+        document.getElementById("manual-login-form").style.display = "none";
+        document.getElementById("signoutButton").style.display = "none";
+        document.getElementById("landing-page").style.display = "flex";
+
+        console.log("Signed out successfully.");
+      } else {
+        console.error("Error saving settings: " + asyncResult.error.message);
+      }
+    });
+  } catch (error) {
+    console.error("Error during sign-out:", error);
+  }
+}
 
 let allGifs = [];
 let isManualLoginInProgress = false;
@@ -25,8 +50,7 @@ async function autoLoginUser() {
     return;
   }
   const userEmail = Office.context.mailbox.userProfile.emailAddress;
-  console.log("userEmail", userEmail);
-
+  document.getElementById("landing-page").style.display = "none";
   try {
     const response = await axios.post("https://gift-server-eu-1.azurewebsites.net/login_with_email", {
       email: userEmail,
@@ -36,6 +60,7 @@ async function autoLoginUser() {
     if (result.status === "Login successful") {
       const accessToken = result.access_token;
       Office.context.roamingSettings.set("accessToken", accessToken);
+      document.getElementById("signoutButton").style.display = "flex";
       Office.context.roamingSettings.saveAsync((asyncResult) => {
         if (asyncResult.status === Office.AsyncResultStatus.Failed) {
           console.error("Error saving access token:", asyncResult.error.message);
@@ -104,7 +129,11 @@ export async function fetchAndDisplayUserGifs() {
     const gifs = response.data.data; // Adjust based on actual response structure
     allGifs = gifs || [];
     console.log("response", response);
-    displayGifs(allGifs);
+    if (allGifs.length === 0) {
+      displayCreateGifButton();
+    } else {
+      displayGifs(allGifs);
+    }
   } catch (error) {
     console.error("Error fetching user gifs:", error);
   }
@@ -193,6 +222,39 @@ function insertGifIntoCurrentEmail(sourceUrl, exampleEmail, base64, resourceId) 
       }
     );
   }
+}
+
+async function signupUser() {
+  try {
+    window.open("https://giveagif-t.com", "_blank");
+  } catch (error) {
+    console.error("Error during auto-login:", error);
+  }
+}
+
+function displayCreateGifButton() {
+  const container = document.getElementById("gifs-container");
+  container.style.display = "flex";
+  container.innerHTML = "";
+
+  const button = document.createElement("button");
+  button.innerText = "Create GIFs";
+  button.style.cursor = "pointer";
+  button.style.display = "flex";
+  button.onclick = function () {
+    window.open("https://giveagif-t.com", "_blank");
+  };
+
+  // Styling the button (Optional)
+  button.style.backgroundColor = "#F4149B";
+  button.style.color = "white";
+  button.style.border = "none";
+  button.style.padding = "10px 20px";
+  button.style.width = "150px";
+  button.style.borderRadius = "50px";
+  button.style.fontSize = "15px";
+
+  container.appendChild(button);
 }
 
 function displayGifs(gifs) {

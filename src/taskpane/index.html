@@ -32,6 +32,9 @@
         alt="Contoso"
         title="Contoso"
       />
+      <button id="signoutButton" type="button" style="display: none;">
+        Sign out
+      </button>
       <div class="gif-library-title">Gif Library</div>
     </header>
     <div id="search-form" style="display: none">
@@ -51,7 +54,16 @@
         background-color: rgba(0, 0, 0, 0.1);
       "
     >
-      <div style="background-color: #83CEF8; margin: auto; padding: 20px; border: 1px solid #888; width: 80%; font-family: Staatliches;">
+      <div
+        style="
+          background-color: #83cef8;
+          margin: auto;
+          padding: 20px;
+          border: 1px solid #888;
+          width: 80%;
+          font-family: Staatliches;
+        "
+      >
         <span id="close-modal" style="float: right; font-size: 25px; font-weight: bold">&times;</span>
         <p>The gif is too large to insert. Please select a smaller file.</p>
       </div>
@@ -73,6 +85,18 @@
         <input type="email" id="email" placeholder="Email" />
         <input type="password" id="password" placeholder="Password" />
         <button id="loginButton">Sign In</button>
+      </div>
+      <div id="landing-page" style="display: flex">
+        <span class="welcome">Welcome to Gif-t</span>
+        <span class="description">
+          Gif-t™ lets you share hyperlinked GIFs right from your email client. Simplify sharing, beautify your emails, and
+          skyrocket click-through rates with Gif-t™
+        </span>
+        <div id="landing-wrapper">
+          <button id="signinButton" type="button">Sign In</button>
+          Or
+          <button id="signupButton" type="button">Sign Up</button>
+        </div>
       </div>
       <div
         id="loading-spinner"
