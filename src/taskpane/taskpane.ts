@@ -259,6 +259,8 @@ function displayCreateGifButton() {
 
 function displayGifs(gifs) {
   const container = document.getElementById("gifs-container");
+  container.style.display = "flex";
+  
   if (!container) {
     console.error("GIFs container not found");
     return;
