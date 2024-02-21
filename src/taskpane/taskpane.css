@@ -97,6 +97,11 @@
   text-decoration: none;
 }
 
+#login-error {
+  color: #fe6b01;
+  font-size: 12px;
+}
+
 #signoutButton {
   position: absolute;
   top: 10px;

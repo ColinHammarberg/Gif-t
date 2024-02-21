@@ -74,6 +74,7 @@
         <div>
           <input type="password" id="password" name="password" placeholder="Enter your password" required />
         </div>
+        <div id="login-error" style="display: none; color: red;">There was an error signing in. Please try again.</div>
         <button type="submit" id="manualLoginButton">Login</button>
       </form>
     </div>
@@ -82,7 +83,7 @@
       <div id="login-form" style="display: none">
         <input type="email" id="email" placeholder="Email" />
         <input type="password" id="password" placeholder="Password" />
-        <button id="loginButton">Sign In</button>
+        <button id="loginButton" style="display: flex;">Sign In</button>
       </div>
       <div id="landing-page" style="display: flex">
         <span class="welcome">Welcome to Gif-t</span>

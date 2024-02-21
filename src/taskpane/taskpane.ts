@@ -52,7 +52,7 @@ async function autoLoginUser() {
   const userEmail = Office.context.mailbox.userProfile.emailAddress;
   document.getElementById("landing-page").style.display = "none";
   try {
-    const response = await axios.post("https://gift-server-eu-1.azurewebsites.net/login_with_email", {
+    const response = await axios.post("https://gift-server-eu-1.azurewebsites.net/signin_with_email_outlook", {
       email: userEmail,
     });
 
@@ -104,11 +104,13 @@ export async function login(event) {
         console.error("Error saving settings: " + asyncResult.error.message);
       } else {
         document.getElementById("manual-login-form").style.display = "none";
+        document.getElementById("login-error").style.display = "none";
         fetchAndDisplayUserGifs();
       }
     });
   } catch (error) {
     console.error("Error signing in:", error);
+    document.getElementById("login-error").style.display = "flex";
   }
   isManualLoginInProgress = false;
 }
