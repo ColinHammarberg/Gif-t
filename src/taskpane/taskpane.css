@@ -92,9 +92,14 @@
   color: #fff;
 }
 
+.a-element {
+  color: #83cef8;
+  text-decoration: none;
+}
+
 #signoutButton {
   position: absolute;
-  bottom: 10px;
+  top: 10px;
   right: 10px;
   font-size: 10px;
   width: 50px;

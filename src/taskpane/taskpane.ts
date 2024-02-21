@@ -57,6 +57,7 @@ async function autoLoginUser() {
     });
 
     const result = response.data;
+    console.log('result', result);
     if (result.status === "Login successful") {
       const accessToken = result.access_token;
       Office.context.roamingSettings.set("accessToken", accessToken);
@@ -95,6 +96,7 @@ export async function login(event) {
     console.log("Sign in successful:", response.data);
 
     Office.context.roamingSettings.set("accessToken", response.data.access_token);
+    document.getElementById("signoutButton").style.display = "flex";
     console.log("response.data.accessToken", response.data.access_token);
     console.log("response.data.accessToken", Office.context.roamingSettings.get("accessToken"));
     Office.context.roamingSettings.saveAsync(function (asyncResult) {
@@ -226,7 +228,7 @@ function insertGifIntoCurrentEmail(sourceUrl, exampleEmail, base64, resourceId) 
 
 async function signupUser() {
   try {
-    window.open("https://giveagif-t.com", "_blank");
+    window.open("https://giveagif-t.com/signup", "_blank");
   } catch (error) {
     console.error("Error during auto-login:", error);
   }
@@ -260,7 +262,7 @@ function displayCreateGifButton() {
 function displayGifs(gifs) {
   const container = document.getElementById("gifs-container");
   container.style.display = "flex";
-  
+
   if (!container) {
     console.error("GIFs container not found");
     return;
