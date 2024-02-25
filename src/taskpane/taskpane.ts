@@ -10,6 +10,7 @@ Office.onReady((info) => {
     document.getElementById("signoutButton")?.addEventListener("click", signoutUser);
     document.getElementById("signupButton")?.addEventListener("click", signupUser);
     document.getElementById("signinButton")?.addEventListener("click", autoLoginUser);
+    document.getElementById("backButton")?.addEventListener("click", signoutUser);
     document.getElementById("searchInput")?.addEventListener("keypress", function (event) {
       if (event.key === "Enter") {
         searchGifs();
@@ -31,7 +32,7 @@ async function signoutUser() {
         document.getElementById("manual-login-form").style.display = "none";
         document.getElementById("signoutButton").style.display = "none";
         document.getElementById("landing-page").style.display = "flex";
-
+        document.getElementById("backButton").style.display = "none";
         console.log("Signed out successfully.");
       } else {
         console.error("Error saving settings: " + asyncResult.error.message);
@@ -75,6 +76,7 @@ async function autoLoginUser() {
   } catch (error) {
     console.error("Error during auto-login:", error);
     displayManualLoginForm();
+    document.getElementById("backButton").style.display = "flex";
   }
 }
 
@@ -105,6 +107,7 @@ export async function login(event) {
       } else {
         document.getElementById("manual-login-form").style.display = "none";
         document.getElementById("login-error").style.display = "none";
+        document.getElementById("backButton").style.display = "none";
         fetchAndDisplayUserGifs();
       }
     });

@@ -102,6 +102,17 @@
   font-size: 12px;
 }
 
+#backButton {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  cursor: pointer;
+}
+
+#backImage {
+  width: 50px;
+}
+
 #signoutButton {
   position: absolute;
   top: 10px;
