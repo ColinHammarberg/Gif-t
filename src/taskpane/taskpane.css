@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css?family=Staatliches&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Roboto&display=swap");
 
 .gif-container {
   display: flex;
@@ -9,6 +10,13 @@
   gap: 20px;
   margin: auto;
   margin-top: 35px;
+  height: 100%;
+  position: relative;
+}
+
+.contact {
+  position: absolute;
+  bottom: 20px;
 }
 
 .ms-font-m {
@@ -80,8 +88,8 @@
 #landing-page {
   display: flex;
   margin: auto;
-  font-family: "Staatliches";
-  background-color: #808080;
+  font-family: "Roboto";
+  background-color: #000000;
   border-radius: 6px;
   padding: 12px 24px;
   justify-content: center;
@@ -94,12 +102,12 @@
 
 .a-element {
   color: #83cef8;
-  text-decoration: none;
 }
 
 #login-error {
   color: #fe6b01;
   font-size: 12px;
+  width: 200px;
 }
 
 #backButton {
@@ -127,7 +135,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
   cursor: pointer;
 }
 
@@ -137,18 +145,30 @@
   display: flex !important;
   justify-content: center;
   color: #fff;
-  font-size: 12px;
+  font-size: 14px;
   text-align: center;
 }
 
+.extra-description {
+  text-align: center;
+  font-size: 14px;
+  width: 200px;
+}
+
 #signupButton {
-  background-color: #83cef8 !important;
+  background-color: #f4149b;
   cursor: pointer;
   width: 150px;
 }
 
 #signinButton {
   width: 150px;
+  background-color: #000;
+  border: 1px solid #fec901;
+}
+
+.auth-divider {
+  font-family: "Staatliches";
 }
 
 #oauthLoginButton {
@@ -182,10 +202,11 @@
   color: #808080;
 }
 
-.manual-login-form {
+#manual-login-form {
   display: flex;
   width: 100%;
   height: 100%;
+  margin-top: 50px;
 }
 
 #loginForm {
@@ -194,7 +215,7 @@
   width: 100%;
   justify-content: center;
   align-items: center;
-  gap: 8px;
+  gap: 16px;
 }
 
 #email {
@@ -203,7 +224,9 @@
   padding-left: 12px;
   padding-right: 12px;
   font-family: "Staatliches";
-  border: 2px solid #f4149b;
+  border: 2px solid #808080;
+  background-color: #000;
+  color: #808080;
 }
 
 #password {
@@ -212,7 +235,9 @@
   padding-left: 12px;
   padding-right: 12px;
   font-family: "Staatliches";
-  border: 2px solid #f4149b;
+  border: 2px solid #808080;
+  color: #808080;
+  background-color: #000;
 }
 
 #error {

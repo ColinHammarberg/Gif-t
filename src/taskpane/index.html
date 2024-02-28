@@ -77,7 +77,7 @@
         <div>
           <input type="password" id="password" name="password" placeholder="Enter your password" required />
         </div>
-        <div id="login-error" style="display: none; color: red">There was an error signing in. Please try again.</div>
+        <div id="login-error" style="display: none; color: red">The email and password entered doesn't match. Please try again or create an account.</div>
         <button type="submit" id="manualLoginButton">Login</button>
       </form>
     </div>
@@ -89,17 +89,18 @@
         <button id="loginButton" style="display: flex">Sign In</button>
       </div>
       <div id="landing-page" style="display: flex">
-        <span class="welcome">Welcome to Gif-t</span>
         <span class="description">
-          Gif-t™ lets you share hyperlinked GIFs right from your email client. Simplify sharing, beautify your emails,
-          and skyrocket click-through rates with Gif-t™
+          Gif-t™ lets you share hyperlinked GIFs right from your email client. 
         </span>
         <div id="landing-wrapper">
           <button id="signinButton" type="button">Sign In</button>
-          Or
+          <div class="auth-divider">Or</div>
           <button id="signupButton" type="button">Sign Up</button>
         </div>
-        <div>Contact Gif-t <a href="https://gif-t.io/gif-support" class="a-element" target="_blank"> here</a></div>
+        <div class="extra-description">
+          Simplify sharing, beautify your emails, and skyrocket click-through rates with Gif-t™
+        </div>
+        <div class="contact">Contact Gif-t <a href="https://gif-t.io/gif-support" class="a-element" target="_blank"> here</a></div>
       </div>
       <div
         id="loading-spinner"
