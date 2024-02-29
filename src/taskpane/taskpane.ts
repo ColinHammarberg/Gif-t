@@ -11,6 +11,7 @@ Office.onReady((info) => {
     document.getElementById("signupButton")?.addEventListener("click", signupUser);
     document.getElementById("signinButton")?.addEventListener("click", autoLoginUser);
     document.getElementById("backButton")?.addEventListener("click", signoutUser);
+    document.getElementById("hamburger").addEventListener("click", clickMenu);
     document.getElementById("searchInput")?.addEventListener("keypress", function (event) {
       if (event.key === "Enter") {
         searchGifs();
@@ -27,10 +28,11 @@ async function signoutUser() {
         document.getElementById("app-body").style.display = "block";
         document.getElementById("search-form").style.display = "none";
         document.getElementById("loading-spinner").style.display = "none";
+        document.getElementById("menu-items").style.display = "none";
         document.getElementById("divider").style.display = "none";
+        document.getElementById("hamburger").style.display = "none";
         document.getElementById("gifs-container").style.display = "none";
         document.getElementById("manual-login-form").style.display = "none";
-        document.getElementById("signoutButton").style.display = "none";
         document.getElementById("landing-page").style.display = "flex";
         document.getElementById("backButton").style.display = "none";
         console.log("Signed out successfully.");
@@ -58,16 +60,17 @@ async function autoLoginUser() {
     });
 
     const result = response.data;
-    console.log('result', result);
     if (result.status === "Login successful") {
       const accessToken = result.access_token;
       Office.context.roamingSettings.set("accessToken", accessToken);
-      document.getElementById("signoutButton").style.display = "flex";
       Office.context.roamingSettings.saveAsync((asyncResult) => {
         if (asyncResult.status === Office.AsyncResultStatus.Failed) {
           console.error("Error saving access token:", asyncResult.error.message);
         } else {
           fetchAndDisplayUserGifs();
+          document.getElementById("hamburger").style.display = "flex";
+          document.getElementById("menu-items").style.display = "flex";
+          console.log("result", result);
         }
       });
     } else {
@@ -77,6 +80,24 @@ async function autoLoginUser() {
     console.error("Error during auto-login:", error);
     displayManualLoginForm();
     document.getElementById("backButton").style.display = "flex";
+  }
+}
+
+function clickMenu() {
+  var menuItems = document.getElementById("menu-items");
+  console.log("menuItem", menuItems);
+  if (menuItems.classList.contains("hidden")) {
+    menuItems.classList.remove("hidden");
+    setTimeout(() => {
+      menuItems.style.opacity = "1";
+      menuItems.style.transform = "translateY(0)";
+    }, 10);
+  } else {
+    menuItems.style.opacity = "0";
+    menuItems.style.transform = "translateY(-20px)";
+    setTimeout(() => {
+      menuItems.classList.add("hidden");
+    }, 300);
   }
 }
 
@@ -98,7 +119,6 @@ export async function login(event) {
     console.log("Sign in successful:", response.data);
 
     Office.context.roamingSettings.set("accessToken", response.data.access_token);
-    document.getElementById("signoutButton").style.display = "flex";
     console.log("response.data.accessToken", response.data.access_token);
     console.log("response.data.accessToken", Office.context.roamingSettings.get("accessToken"));
     Office.context.roamingSettings.saveAsync(function (asyncResult) {
@@ -106,6 +126,8 @@ export async function login(event) {
         console.error("Error saving settings: " + asyncResult.error.message);
       } else {
         document.getElementById("manual-login-form").style.display = "none";
+        document.getElementById("hamburger").style.display = "flex";
+        document.getElementById("menu-items").style.display = "flex";
         document.getElementById("login-error").style.display = "none";
         document.getElementById("backButton").style.display = "none";
         fetchAndDisplayUserGifs();
